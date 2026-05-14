@@ -14,7 +14,7 @@ def main():
             if args[1] in builtin:
                 sys.stdout.write(f"{args[1]} is a shell builtin\n")
             else:
-                sys.stdout.write(f"{args[1]}: command not found\n")
+                sys.stdout.write(f"{args[1]}: not found\n")
         else:
             sys.stdout.write(f"{command}: not found\n")
         pass

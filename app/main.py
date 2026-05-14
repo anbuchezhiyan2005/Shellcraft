@@ -1,7 +1,7 @@
 import sys
 commands = {
     "exit": lambda _: sys.exit(0),
-    "echo": lambda input: sys.stdout.write(input[1:] + "\n"),
+    "echo": lambda input: sys.stdout.write(input + "\n"),
     "type": lambda input: sys.stdout.write(f"{args} is a shell builtin\n") if (args := input[1]) in commands else sys.stdout.write(f"{args} not found\n")
 }
 def main():
@@ -13,7 +13,7 @@ def main():
         if command == "exit":
             commands[command]
         elif command == "echo":
-            commands[command](input)
+            commands[command](" ".join(input[1:]))
         elif command == "type":
             commands[command](input)
         pass

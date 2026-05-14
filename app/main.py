@@ -1,6 +1,6 @@
 import sys
 commands = {
-    "exit": lambda input: sys.exit(0),
+    "exit": lambda _: sys.exit(0),
     "echo": lambda input: sys.stdout.write(f"{" ".join(input[1:])} \n"),
     "type": lambda input: sys.stdout.write(f"{args} is a shell builtin\n") 
                             if (args := input[1]) in commands 

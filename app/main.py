@@ -26,7 +26,7 @@ def helper(command: str):
         finally:
             pass
     
-    sys.stdout.write("f{command} not found\n")
+    sys.stdout.write(f"{command} not found\n")
 
 
 def main():

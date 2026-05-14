@@ -1,10 +1,14 @@
 import sys
-from app import constant
+import constant
 
 def main():
     while True:
         sys.stdout.write("$ ")
+        sys.stdout.flush()
         userInput = sys.stdin.readline().strip()
+        if not userInput:
+            continue
+        
         input = userInput.split()
         command = input[0] if input else ""
         if command in constant.commands:

@@ -8,7 +8,7 @@ def main():
     while True:
         sys.stdout.write("$ ")
         input = sys.stdin.readline().strip()
-        command = input.split(" ")[0] if input else ""
+        command = input.split()[0] if input else ""
         userInput = " ".join(input[5:])
         if command == "exit":
             commands[command]

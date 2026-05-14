@@ -1,5 +1,5 @@
 import sys
-import constant
+from app import constant
 
 def main():
     while True:
@@ -8,7 +8,7 @@ def main():
         userInput = sys.stdin.readline().strip()
         if not userInput:
             continue
-        
+
         input = userInput.split()
         command = input[0] if input else ""
         if command in constant.commands:

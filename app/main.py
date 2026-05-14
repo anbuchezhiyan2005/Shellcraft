@@ -16,7 +16,8 @@ def main():
             commands[command](" ".join(input[1:]))
         elif command == "type":
             commands[command](input)
-        pass
+        else:
+            pass
 
 
 if __name__ == "__main__":

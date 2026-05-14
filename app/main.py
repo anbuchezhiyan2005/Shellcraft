@@ -1,5 +1,6 @@
 import sys
 from app import constant
+from app import utils
 
 def main():
     while True:
@@ -14,7 +15,7 @@ def main():
         if command in constant.commands:
             constant.commands[command](input)
         else:
-            sys.stdout.write(f"{command}: command not found\n")
+            utils.execute(input)
 
 
 if __name__ == "__main__":

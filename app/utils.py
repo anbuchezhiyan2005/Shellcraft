@@ -14,4 +14,4 @@ def execute(command: list[str]):
     if path:
         subprocess.run(command)
     else:
-        sys.stdout.write(f"{" ".join(command)}: Command not found\n")
+        sys.stdout.write(f"{" ".join(command)}: command not found\n")

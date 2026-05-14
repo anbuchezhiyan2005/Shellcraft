@@ -5,9 +5,13 @@ def main():
     while True:
         sys.stdout.write("$ ")
         command = sys.stdin.readline().strip()
-        if command == "exit":
+        args = command.split()
+        if args[0] == "exit":
             break
-        sys.stdout.write(f"{command}: command not found\n")
+        if args[0] == "echo":
+            sys.stdout.write(" ".join(args[1:]) + "\n")
+        else:
+            sys.stdout.write(f"{command}: command not found\n")
         pass
 
 

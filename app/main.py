@@ -5,7 +5,7 @@ def main():
     while True:
         sys.stdout.write("$ ")
         command = sys.stdin.readline().strip()
-        sys.stdout.write(f"{command}: command not found")
+        sys.stdout.write(f"{command}: command not found\n")
         pass
 
 

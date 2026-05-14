@@ -15,7 +15,7 @@ def helper(command: str):
     for dir in path_dirs:
         fullPath = os.path.join(dir, command)
         try:
-            if os.path.isFile(fullPath) and os.access(fullPath, os.X_OK):
+            if os.path.isfile(fullPath) and os.access(fullPath, os.X_OK):
                 sys.stdout.write(f"{command} is {fullPath} \n")
                 return
             else: 

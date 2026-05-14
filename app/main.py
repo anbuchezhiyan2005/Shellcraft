@@ -15,8 +15,8 @@ def main():
         command = input[0] if input else ""
         if command in commands:
             commands[command](input)
-        # else:
-        #     sys.stdout.write(f"{command}: command not found\n")
+        else:
+            sys.stdout.write(f"{command}: command not found\n")
 
 
 if __name__ == "__main__":

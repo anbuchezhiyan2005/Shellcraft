@@ -2,7 +2,6 @@ import sys
 import shutil
 import subprocess
 import os
-import shlex
 
 def helper(command: str):
     fullPath = shutil.which(command)

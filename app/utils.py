@@ -10,15 +10,16 @@ def helper(command: str):
     else:
         sys.stdout.write(f"{command} not found\n")
 
-def execute(command: list[str]):
-    path = shutil.which(command[0])
+def execute(command: str):
+    path = shutil.which(command)
     if path:
         subprocess.run(command)
     else:
-        sys.stdout.write(f"{" ".join(command)}: command not found\n")
+        sys.stdout.write(f"{command}: command not found\n")
 
-def check_directory(command: list):
-    path = " ".join(command[1:])
+def check_directory(userInput: str):
+    command = get_command(userInput)
+    path = userInput[len(command) + 1:]
     curr_path = os.getcwd()
 
     if path == "~":
@@ -38,3 +39,47 @@ def check_directory(command: list):
     
     else:
         sys.stdout.write(f"cd: {path}: No such file or directory\n")
+
+def tokenize(userInput: str):
+    command = get_command(userInput)
+    input = userInput[len(command) + 1:]
+    tokens = []
+    current_token = []
+    in_quotes = False
+
+    for char in input:
+        if char == "'" and not in_quotes:
+            in_quotes = True
+        
+        elif char == "'" and in_quotes:
+            in_quotes = False
+        
+        elif char == " " and not in_quotes:
+            if current_token:
+                tokens.append("".join(current_token))
+                current_token = []
+
+        else:
+            current_token.append(char)
+    
+    if current_token:
+        tokens.append("".join(current_token))
+    
+    return tokens
+
+def get_command(userInput: str):
+    command = ""
+
+    for char in userInput:
+        if char == " ":
+            if command:
+                return command     
+        else:
+            command += char
+    
+    return command
+
+        
+        
+
+

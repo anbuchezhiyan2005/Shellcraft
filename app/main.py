@@ -2,20 +2,21 @@ import sys
 from app import constant
 from app import utils
 
+
 def main():
     while True:
         sys.stdout.write("$ ")
         sys.stdout.flush()
-        userInput = sys.stdin.readline().strip()
+        userInput = sys.stdin.readline()
         if not userInput:
             continue
 
-        input = userInput.split()
-        command = input[0] if input else ""
+        userInput = userInput.strip()  # Strip leading/trailing whitespace
+        command = utils.get_command(userInput)
         if command in constant.commands:
-            constant.commands[command](input)
+            constant.commands[command](userInput)
         else:
-            utils.execute(input)
+            utils.execute(command)
 
 
 if __name__ == "__main__":

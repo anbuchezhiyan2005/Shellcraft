@@ -45,7 +45,7 @@ def tokenize(userInput: str):
     command = get_command(userInput)
     input = userInput[len(command) + 1:]
     tokens = shlex.split(input)
-    return shlex.join(tokens)
+    return tokens
     
 
 def get_command(userInput: str):

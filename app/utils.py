@@ -23,7 +23,8 @@ def check_directory(command: list):
 
     if path == "~":
         try:
-            os.chdir(os.getenv('HOME'))
+            home_path = os.path.expanduser('~')
+            os.chdir(home_path)
         except Exception as e:
             sys.stderr.write(f"Error: {e}\n")
             os.chdir(curr_path)

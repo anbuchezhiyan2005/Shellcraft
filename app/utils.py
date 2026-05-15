@@ -55,7 +55,7 @@ def get_command(userInput: str):
     return parts[0]
 
 def check_builtin(command: str, command_dict: dict):
-    if command in constant.command_dict:
+    if command in command_dict:
         sys.stdout.write(f"{command} is a shell builtin\n")
     else:
         helper(command)

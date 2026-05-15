@@ -7,7 +7,7 @@ commands = {
     "type": lambda args: sys.stdout.write(f"{arg} is a shell builtin\n") 
                             if (arg := args[1]) in commands 
                             else utils.helper(arg),
-    "pwd": lambda _: sys.stdout.write(f"{os.getcwd()}")
+    "pwd": lambda _: sys.stdout.write(f"{os.getcwd()}\n")
 }
 
 

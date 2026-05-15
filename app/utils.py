@@ -17,7 +17,8 @@ def execute(command: list[str]):
     else:
         sys.stdout.write(f"{" ".join(command)}: command not found\n")
 
-def check_directory(path: str):
+def check_directory(command: list):
+    path = " ".join(command[1:])
     curr_path = os.getcwd()
     if os.path.isdir(path):
         try:

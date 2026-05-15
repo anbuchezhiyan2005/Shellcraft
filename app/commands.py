@@ -20,7 +20,7 @@ def type_command(userInput: str):
     parts = shlex.split(userInput)
     argument = parts[1]
     
-    if argument in constant.commands:
+    if argument in constant.command_dict:
         sys.stdout.write(f"{argument} is a shell builtin\n")
     else:
         utils.helper(argument)

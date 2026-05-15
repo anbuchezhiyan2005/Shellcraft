@@ -19,7 +19,7 @@ def execute(command: list[str]):
 
 def check_directory(path: str):
     curr_path = os.getcwd()
-    if os.path.is_dir(path):
+    if os.path.isdir(path):
         try:
             os.chdir(path)
         except Exception as e:

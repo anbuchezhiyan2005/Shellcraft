@@ -1,7 +1,6 @@
 import shlex
 import sys
 import os
-from app import constant
 from app import utils
 
 def echo_command(userInput: str):
@@ -16,11 +15,8 @@ def pwd_command():
 def cd_command(userInput: str):
     utils.check_directory(userInput)
 
-def type_command(userInput: str):
+def type_command(userInput: str, command_dict: dict):
     parts = shlex.split(userInput)
-    argument = parts[1]
+    utils.check_builtin(parts[1], command_dict)
     
-    if argument in constant.command_dict:
-        sys.stdout.write(f"{argument} is a shell builtin\n")
-    else:
-        utils.helper(argument)
+    

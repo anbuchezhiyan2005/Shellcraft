@@ -2,6 +2,7 @@ import sys
 import shutil
 import subprocess
 import os
+import shlex
 
 def helper(command: str):
     fullPath = shutil.which(command)
@@ -43,29 +44,9 @@ def check_directory(userInput: str):
 def tokenize(userInput: str):
     command = get_command(userInput)
     input = userInput[len(command) + 1:]
-    tokens = []
-    current_token = []
-    in_quotes = False
-
-    for char in input:
-        if char == "'" and not in_quotes:
-            in_quotes = True
-        
-        elif char == "'" and in_quotes:
-            in_quotes = False
-        
-        elif char == " " and not in_quotes:
-            if current_token:
-                tokens.append("".join(current_token))
-                current_token = []
-
-        else:
-            current_token.append(char)
-    
-    if current_token:
-        tokens.append("".join(current_token))
-    
+    tokens = shlex.split(input)
     return tokens
+    
 
 def get_command(userInput: str):
     command = ""

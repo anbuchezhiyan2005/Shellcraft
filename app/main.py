@@ -11,7 +11,7 @@ def main():
         if not userInput:
             continue
 
-        userInput = userInput.strip()  # Strip leading/trailing whitespace
+        userInput = userInput.strip() 
         command = utils.get_command(userInput)
         if command in constant.commands:
             constant.commands[command](userInput)

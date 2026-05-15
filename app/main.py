@@ -16,7 +16,7 @@ def main():
         if command in constant.commands:
             constant.commands[command](userInput)
         else:
-            utils.execute(command)
+            utils.execute(userInput)
 
 
 if __name__ == "__main__":

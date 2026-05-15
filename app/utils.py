@@ -11,10 +11,12 @@ def helper(command: str):
     else:
         sys.stdout.write(f"{command} not found\n")
 
-def execute(command: str):
+def execute(input: str):
+    parts = shlex.split(input)
+    command = parts[0]
     path = shutil.which(command)
     if path:
-        subprocess.run(command)
+        subprocess.run(parts)
     else:
         sys.stdout.write(f"{command}: command not found\n")
 
@@ -45,6 +47,7 @@ def tokenize(userInput: str):
     command = get_command(userInput)
     input = userInput[len(command) + 1:]
     tokens = shlex.split(input, posix = True)
+    print(tokens)
     return tokens
     
 

@@ -15,10 +15,10 @@ def main():
         sys.stdout.write("$ ")
         sys.stdout.flush()
         userInput = sys.stdin.readline()
+        userInput = userInput.strip() 
         if not userInput:
             continue
-
-        userInput = userInput.strip() 
+        
         command = utils.get_command(userInput)
         if command in command_dict:
             command_dict[command](userInput)

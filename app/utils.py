@@ -11,8 +11,7 @@ def helper(command: str):
     else:
         sys.stdout.write(f"{command} not found\n")
 
-def execute(input: str):
-    parts = shlex.split(input)
+def execute(parts: list):
     command = parts[0]
     path = shutil.which(command)
     if path:

@@ -20,7 +20,15 @@ def execute(command: list[str]):
 def check_directory(command: list):
     path = " ".join(command[1:])
     curr_path = os.getcwd()
-    if os.path.isdir(path):
+
+    if path == "~":
+        try:
+            os.chdir(os.getenv('HOME'))
+        except Exception as e:
+            sys.stderr.write(f"Error: {e}\n")
+            os.chdir(curr_path)
+
+    elif os.path.isdir(path):
         try:
             os.chdir(path)
         except Exception as e:

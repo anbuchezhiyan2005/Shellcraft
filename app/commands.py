@@ -1,10 +1,9 @@
-import shlex
 import sys
 import os
 from app import utils
 
-def echo_command(userInput: str):
-    sys.stdout.write(f"{" ".join(utils.tokenize(userInput))}\n")
+def echo_command(parts: list):
+    sys.stdout.write(f"{" ".join(parts[1:])}\n")
 
 def exit_command():
     sys.exit(0)
@@ -12,11 +11,10 @@ def exit_command():
 def pwd_command():
     sys.stdout.write(f"{os.getcwd()}\n")
 
-def cd_command(userInput: str):
-    utils.check_directory(userInput)
+def cd_command(parts: list):
+    utils.check_directory(parts)
 
-def type_command(userInput: str, command_dict: dict):
-    parts = shlex.split(userInput)
+def type_command(parts: list, command_dict: dict):
     utils.check_builtin(parts[1], command_dict)
     
     

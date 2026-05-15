@@ -20,9 +20,8 @@ def execute(input: str):
     else:
         sys.stdout.write(f"{command}: command not found\n")
 
-def check_directory(userInput: str):
-    command = get_command(userInput)
-    path = userInput[len(command) + 1:]
+def check_directory(parts: list):
+    path = " ".join(parts[1:])
     curr_path = os.getcwd()
 
     if path == "~":
@@ -39,20 +38,8 @@ def check_directory(userInput: str):
         except Exception as e:
             sys.stderr.write(f"Error: {e}\n")
             os.chdir(curr_path)
-    
     else:
-        sys.stdout.write(f"cd: {path}: No such file or directory\n")
-
-def tokenize(userInput: str):
-    command = get_command(userInput)
-    input = userInput[len(command) + 1:]
-    tokens = shlex.split(input, posix = True)
-    return tokens
-    
-
-def get_command(userInput: str):
-    parts = shlex.split(userInput)
-    return parts[0]
+        sys.stdout.write(f"cd: {path}: No such file or directory\n")    
 
 def check_builtin(command: str, command_dict: dict):
     if command in command_dict:

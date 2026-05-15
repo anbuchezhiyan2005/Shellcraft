@@ -13,8 +13,8 @@ def main():
 
         userInput = userInput.strip() 
         command = utils.get_command(userInput)
-        if command in constant.commands:
-            constant.commands[command](userInput)
+        if command in constant.command_dict:
+            constant.command_dict[command](userInput)
         else:
             utils.execute(userInput)
 

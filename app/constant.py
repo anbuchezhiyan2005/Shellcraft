@@ -1,13 +1,11 @@
-import sys
-import os
-from app import utils
+from app import commands
 
-commands = {
-    "exit": lambda _: sys.exit(0),
-    "echo": lambda input: sys.stdout.write(f"{" ".join(utils.tokenize(input))}\n"),
-    "type": lambda input: utils.type_command(input),
-    "pwd": lambda _: sys.stdout.write(f"{os.getcwd()}\n"),
-    "cd": lambda input: utils.check_directory(input) 
+command_dict = {
+    "exit": lambda _: commands.exit_command(),
+    "echo": lambda input: commands.echo_command(input),
+    "type": lambda input: commands.type_command(input),
+    "pwd": lambda _: commands.pwd_command(),
+    "cd": lambda input: commands.cd_command(input) 
 }
 
 

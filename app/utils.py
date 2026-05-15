@@ -3,7 +3,6 @@ import shutil
 import subprocess
 import os
 import shlex
-from app import constant
 
 def helper(command: str):
     fullPath = shutil.which(command)
@@ -55,15 +54,7 @@ def get_command(userInput: str):
     parts = shlex.split(userInput)
     return parts[0]
 
-def type_command(userInput: str):
-    parts = shlex.split(userInput)
-    command = parts[0]
-    argument = parts[1]
-    
-    if argument in constant.commands:
-        sys.stdout.write(f"{argument} is a shell builtin\n")
-    else:
-        helper(argument)
+
         
 
 

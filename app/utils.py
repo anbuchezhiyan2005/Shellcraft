@@ -3,6 +3,7 @@ import shutil
 import subprocess
 import os
 import shlex
+from app import constant
 
 def helper(command: str):
     fullPath = shutil.which(command)
@@ -51,18 +52,18 @@ def tokenize(userInput: str):
     
 
 def get_command(userInput: str):
-    command = ""
+    parts = shlex.split(userInput)
+    return parts[0]
 
-    for char in userInput:
-        if char == " ":
-            if command:
-                return command     
-        else:
-            command += char
+def type_command(userInput: str):
+    parts = shlex.split(userInput)
+    command = parts[0]
+    argument = parts[1]
     
-    return command
-
-        
+    if argument in constant.commands:
+        sys.stdout.write(f"{argument} is a shell builtin\n")
+    else:
+        helper(argument)
         
 
 

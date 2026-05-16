@@ -3,7 +3,23 @@ import os
 from app import utils
 
 def echo_command(parts: list):
-    sys.stdout.write(f"{" ".join(parts[1:])}\n")
+    if ">" in parts:
+        idx = parts.index(">", start = 1, end = len(parts))
+        content = " ".join(parts[1:idx])
+        file_path = parts[idx + 1]
+
+        try:
+            directory = os.path.dirname(file_path)
+            if directory and not os.path.exists(directory):
+                os.makedirs(directory)  
+
+            with open(file_path, mode = "w", encoding = "utf-8") as file:
+                file.write(content)
+
+        except Exception as e:
+            sys.stderr.write(f"Error: {e}")
+    else:
+        sys.stdout.write(f"{" ".join(parts[1:])}\n")
 
 def exit_command():
     sys.exit(0)

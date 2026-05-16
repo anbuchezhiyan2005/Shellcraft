@@ -7,17 +7,22 @@ def echo_command(parts: list):
         idx = parts.index(">")
         content = parts[idx - 1]
         file_path = parts[idx + 1]
+        print(f"File path: {file_path}")
 
-        # try:
-        directory = os.path.dirname(os.path.abspath(file_path))
-        if directory and not os.path.exists(directory):
-            os.makedirs(directory)  
+        try:
+            directory = os.path.dirname(os.path.abspath(file_path))
+            print(f"Directory: {directory}")
+            if directory and not os.path.exists(directory):
+                print("Directory does not exist")
+                os.makedirs(directory)
+            else:
+               print("Directory exist") 
 
-        with open(file_path, mode = "w", encoding = "utf-8") as file:
-            file.write(content)
+            with open(file_path, mode = "w", encoding = "utf-8") as file:
+                file.write(content)
 
-        # except Exception as e:
-        #     sys.stderr.write(f"Error: {e}")
+        except Exception as e:
+            sys.stderr.write(f"Error: {e}")
     else:
         sys.stdout.write(f"{" ".join(parts[1:])}\n")
 

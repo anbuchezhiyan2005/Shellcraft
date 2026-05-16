@@ -2,6 +2,9 @@ import sys
 import shutil
 import subprocess
 import os
+from collections import namedtuple
+
+RedirectionResult = namedtuple("RedirectionResult", ["redirect", "idx"])
 
 def helper(command: str):
     fullPath = shutil.which(command)
@@ -10,47 +13,62 @@ def helper(command: str):
     else:
         sys.stdout.write(f"{command} not found\n")
 
+def check_redirection(parts: list):
+
+    if not parts:
+        return RedirectionResult(False, -1)
+    
+    redirect = False
+    idx = -1
+    if ">" in parts:
+        idx = parts.index(">")
+        redirect = True
+    elif "1>" in parts:
+        idx = parts.index("1>")
+        redirect = True
+    else:
+        redirect = False
+    
+    return RedirectionResult(redirect, idx)
+
+def execute_redirection(idx: int, parts: list):
+    LHS_command = parts[: idx]
+    if idx + 1 >= len(parts):
+        sys.stderr.write("Error: Missing output file for redirection\n")
+        return
+    
+    output_file_path = parts[idx + 1]
+
+    try:
+        create_directory_for_file(output_file_path)
+
+        result = subprocess.run(LHS_command, capture_output = True, text = True)
+        if result.returncode != 0:
+            sys.stderr.write(result.stderr)
+            return False
+        
+        with open(output_file_path, mode = "w", encoding = "utf-8") as file:
+            file.write(result.stdout)
+        return True
+    
+    except Exception as e:
+        sys.stderr.write(f"Error: {e}")
+        return False
+
 def execute(parts: list):
     command = parts[0]
     path = shutil.which(command)
     if path:
-        redirection = False
-        idx = -1
-        if ">" in parts:
-            idx = parts.index(">")
-            redirection = True
-        elif "1>" in parts:
-            idx = parts.index("1>")
-            redirection = True
-        else:
-            redirection = False
-        
-        if redirection:
-            LHS_command = parts[: idx]
-            output_file_path = parts[idx + 1] if idx + 1 < len(parts) else sys.stderr.write("Error: Missing output file for redirection\n")
-
-            try:
-                directory = os.path.dirname(os.path.abspath(output_file_path))
-                if directory:
-                    try:
-                        os.makedirs(directory, exist_ok = True)
-                    except Exception as e:
-                        sys.stderr.write(f"Error creating directory {directory}: {e}\n")
-
-                result = subprocess.run(LHS_command, capture_output = True, text = True)
-                if result.returncode != 0:
-                    sys.stderr.write(result.stderr)
-                
-                with open(output_file_path, mode = "w", encoding = "utf-8") as file:
-                    file.write(result.stdout)
-
-            except Exception as e:
-                sys.stderr.write(f"Error: {e}")
+        redirect, idx = check_redirection(parts)
+        if redirect:
+            success = execute_redirection(idx, parts)
+            if not success:
+                sys.stderr.write("Redirection command failed.\n")
         else:
             subprocess.run(parts)
             
     else:
-        sys.stdout.write(f"{command}: command not found\n")
+        sys.stderr.write(f"{command}: command not found\n")
 
 def check_directory(parts: list):
     path = " ".join(parts[1:])
@@ -72,6 +90,14 @@ def check_directory(parts: list):
             os.chdir(curr_path)
     else:
         sys.stdout.write(f"cd: {path}: No such file or directory\n")    
+
+def create_directory_for_file(file_path: str):
+    directory = os.path.dirname(os.path.abspath(file_path))
+    if directory:
+        try:
+            os.makedirs(directory, exist_ok = True)
+        except Exception as e:
+            sys.stderr.write(f"Error creating directory {directory}: {e}\n")
 
 def check_builtin(command: str, command_dict: dict):
     if command in command_dict:

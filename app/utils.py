@@ -34,7 +34,6 @@ def check_redirection(parts: list):
 def execute_redirection(idx: int, parts: list):
     LHS_command = parts[: idx]
     if idx + 1 >= len(parts):
-        sys.stderr.write("Error: Missing output file for redirection\n")
         return
     
     output_file_path = parts[idx + 1]

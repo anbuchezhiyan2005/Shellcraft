@@ -8,16 +8,16 @@ def echo_command(parts: list):
         content = parts[idx - 1]
         file_path = parts[idx + 1]
 
-        try:
-            directory = os.path.dirname(os.path.abspath(file_path))
-            if directory and not os.path.exists(directory):
-                os.makedirs(directory)  
+        # try:
+        directory = os.path.dirname(os.path.abspath(file_path))
+        if directory and not os.path.exists(directory):
+            os.makedirs(directory)  
 
-            with open(file_path, mode = "w", encoding = "utf-8") as file:
-                file.write(content)
+        with open(file_path, mode = "w", encoding = "utf-8") as file:
+            file.write(content)
 
-        except Exception as e:
-            sys.stderr.write(f"Error: {e}")
+        # except Exception as e:
+        #     sys.stderr.write(f"Error: {e}")
     else:
         sys.stdout.write(f"{" ".join(parts[1:])}\n")
 

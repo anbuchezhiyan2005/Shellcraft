@@ -38,8 +38,11 @@ def execute(parts: list):
                         sys.stderr.write(f"Error creating directory {directory}: {e}\n")
 
                 result = subprocess.run(LHS_command, capture_output = True, text = True)
+                if result.returncode != 0:
+                    sys.stderr.write(result.stderr)
+                
                 with open(output_file_path, mode = "w", encoding = "utf-8") as file:
-                    file.write(result.stdout + result.stderr)
+                    file.write(result.stdout)
 
             except Exception as e:
                 sys.stderr.write(f"Error: {e}")

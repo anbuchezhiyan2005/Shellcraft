@@ -39,7 +39,7 @@ def execute(parts: list):
 
                 result = subprocess.run(LHS_command, capture_output = True, text = True)
                 with open(output_file_path, mode = "w", encoding = "utf-8") as file:
-                    file.write(result.stdout)
+                    file.write(result.stdout + result.stderr)
 
             except Exception as e:
                 sys.stderr.write(f"Error: {e}")

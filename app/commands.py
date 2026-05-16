@@ -5,7 +5,7 @@ from app import utils
 def echo_command(parts: list):
     if ">" in parts:
         idx = parts.index(">")
-        content = " ".join(parts[1:idx])
+        content = parts[idx - 1]
         file_path = parts[idx + 1]
 
         try:

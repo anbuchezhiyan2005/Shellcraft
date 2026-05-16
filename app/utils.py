@@ -44,15 +44,12 @@ def execute_redirection(idx: int, parts: list):
         result = subprocess.run(LHS_command, capture_output = True, text = True)
         if result.returncode != 0:
             sys.stderr.write(result.stderr)
-            return False
         
         with open(output_file_path, mode = "w", encoding = "utf-8") as file:
             file.write(result.stdout)
-        return True
     
     except Exception as e:
         sys.stderr.write(f"Error: {e}")
-        return False
 
 def execute(parts: list):
     command = parts[0]

@@ -61,9 +61,7 @@ def execute(parts: list):
     if path:
         redirect, idx = check_redirection(parts)
         if redirect:
-            success = execute_redirection(idx, parts)
-            if not success:
-                sys.stderr.write("Redirection command failed.\n")
+            execute_redirection(idx, parts)
         else:
             subprocess.run(parts)
             

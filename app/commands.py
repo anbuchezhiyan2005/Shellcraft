@@ -9,7 +9,7 @@ def echo_command(parts: list):
         file_path = parts[idx + 1]
 
         try:
-            directory = os.path.dirname(file_path)
+            directory = os.path.dirname(os.path.abspath(file_path))
             if directory and not os.path.exists(directory):
                 os.makedirs(directory)  
 

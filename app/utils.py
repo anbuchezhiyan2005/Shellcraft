@@ -14,7 +14,28 @@ def execute(parts: list):
     command = parts[0]
     path = shutil.which(command)
     if path:
-        subprocess.run(parts)
+        if ">" in parts:
+            idx = parts.index(">")
+            LHS_command = parts[: idx]
+            output_file_path = parts[idx + 1] if idx + 1 < len(parts) else sys.stderr.write("Error: Missing output file for redirection\n")
+
+            try:
+                directory = os.path.dirname(os.path.abspath(output_file_path))
+                if directory:
+                    try:
+                        os.makedirs(directory, exist_ok = True)
+                    except Exception as e:
+                        sys.stderr.write(f"Error creating directory {directory}: {e}\n")
+
+                result = subprocess.run(LHS_command, capture_output = True, text = True)
+                with open(output_file_path, mode = "w", encoding = "utf-8") as file:
+                    file.write(result.stdout)
+
+            except Exception as e:
+                sys.stderr.write(f"Error: {e}")
+        else:
+            subprocess.run(parts)
+            
     else:
         sys.stdout.write(f"{command}: command not found\n")
 

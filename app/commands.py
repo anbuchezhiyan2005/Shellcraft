@@ -11,8 +11,11 @@ def echo_command(parts: list):
 
         try:
             directory = os.path.dirname(os.path.abspath(output_file_path))
-            if directory and not os.path.exists(directory):
-                os.makedirs(directory)
+            if directory:
+                try:
+                    os.makedirs(directory, exist_ok = True)
+                except Exception as e:
+                    sys.stderr.write(f"Error creating directory {directory}: {e}\n")
 
             result = subprocess.run(LHS_command, capture_output = True, text = True)
             with open(output_file_path, mode = "w", encoding = "utf-8") as file:
@@ -21,7 +24,7 @@ def echo_command(parts: list):
         except Exception as e:
             sys.stderr.write(f"Error: {e}")
     else:
-        sys.stdout.write(f"{" ".join(parts[1:])}\n")
+        utils.execute(parts)
 
 def exit_command():
     sys.exit(0)

@@ -4,7 +4,7 @@ from app import utils
 
 def echo_command(parts: list):
     if ">" in parts:
-        idx = parts.index(">", start = 1, end = len(parts))
+        idx = parts.index(">")
         content = " ".join(parts[1:idx])
         file_path = parts[idx + 1]
 

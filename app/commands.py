@@ -1,20 +1,22 @@
 import sys
 import os
 from app import utils
+import subprocess
 
 def echo_command(parts: list):
     if ">" in parts:
         idx = parts.index(">")
-        content = parts[idx - 1]
-        file_path = parts[idx + 1]
+        LHS_command = parts[: idx]
+        output_file_path = parts[idx + 1]
 
         try:
-            directory = os.path.dirname(os.path.abspath(file_path))
+            directory = os.path.dirname(os.path.abspath(output_file_path))
             if directory and not os.path.exists(directory):
                 os.makedirs(directory)
 
-            with open(file_path, mode = "w", encoding = "utf-8") as file:
-                file.write(content)
+            result = subprocess.run(LHS_command, capture_output = True, text = True)
+            with open(output_file_path, mode = "w", encoding = "utf-8") as file:
+                file.write(result.stdout)
 
         except Exception as e:
             sys.stderr.write(f"Error: {e}")

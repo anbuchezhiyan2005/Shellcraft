@@ -12,6 +12,7 @@ I look up functions, read docs, and debug as I go — but the decisions on how t
 - `cd` — change directory, supports `~`
 - `type` — identify if a command is a shell builtin or external
 - External command execution via PATH resolution
+- **Redirection (`>` and `1>`)** — redirect stdout to a file, creating directories as needed
 
 ## Project Structure
 ```

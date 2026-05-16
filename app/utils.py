@@ -14,8 +14,18 @@ def execute(parts: list):
     command = parts[0]
     path = shutil.which(command)
     if path:
-        if ">" or "1>" in parts:
+        redirection = False
+        idx = -1
+        if ">" in parts:
             idx = parts.index(">")
+            redirection = True
+        elif "1>" in parts:
+            idx = parts.index("1>")
+            redirection = True
+        else:
+            redirection = False
+        
+        if redirection:
             LHS_command = parts[: idx]
             output_file_path = parts[idx + 1] if idx + 1 < len(parts) else sys.stderr.write("Error: Missing output file for redirection\n")
 

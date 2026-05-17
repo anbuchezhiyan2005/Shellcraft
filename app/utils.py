@@ -46,12 +46,14 @@ def execute_redirection(redirect: str, idx: int, parts: list):
         with open(output_file_path, mode = "w", encoding = "utf-8") as file:
             file.write(result.stderr if redirect == "2>" else result.stdout)
 
-        if redirect == "2>":
-            sys.stdout.write(result.stderr)
-        elif redirect == "":
+        if result.stdout:
             sys.stdout.write(result.stdout)
-        else:
-            sys.stdout.write(result.stderr if result.returncode != 0 else result.stdout)
+        # if redirect == "2>" and result.stdout:
+        #     sys.stdout.write(result.stdout)
+        # elif redirect == "":
+        #     sys.stdout.write(result.stdout)
+        # else:
+        #     sys.stdout.write(result.stderr if result.returncode != 0 else result.stdout)
 
     except Exception as e:
         sys.stderr.write(f"Error: {e}")

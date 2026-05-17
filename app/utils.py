@@ -49,7 +49,7 @@ def execute_redirection(redirect: str, idx: int, parts: list):
         if result.returncode == 0:
             with open(output_file_path, mode = "w", encoding = "utf-8") as file:
                 file.write(result.stdout)
-                sys.stdout.write(f"{result.stdout}\n")
+                sys.stdout.write(f"{result.stdout}")
         else:
             with open(output_file_path, mode = "w", encoding = "utf-8") as file:
                 file.write(result.stderr)

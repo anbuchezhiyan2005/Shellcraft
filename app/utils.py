@@ -43,8 +43,8 @@ def execute_redirection(redirect: str, idx: int, parts: list):
         create_directory_for_file(output_file_path)
 
         result = subprocess.run(LHS_command, capture_output = True, text = True)
-        if result.returncode != 0:
-            sys.stderr.write(result.stderr)
+        # if result.returncode != 0:
+        #     sys.stderr.write(result.stderr)
         
         if redirect in (">", "1>"):
             with open(output_file_path, mode = "w", encoding = "utf-8") as file:

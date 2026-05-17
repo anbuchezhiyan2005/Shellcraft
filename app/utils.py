@@ -16,22 +16,23 @@ def helper(command: str):
 def check_redirection(parts: list):
 
     if not parts:
-        return RedirectionResult(False, -1)
+        return RedirectionResult("", -1)
     
-    redirect = False
+    redirect = ""
     idx = -1
     if ">" in parts:
         idx = parts.index(">")
-        redirect = True
+        redirect = ">"
     elif "1>" in parts:
         idx = parts.index("1>")
-        redirect = True
-    else:
-        redirect = False
+        redirect = "1>"
+    elif "2>" in parts:
+        idx = parts.index("2>")
+        redirect = "2>"
     
     return RedirectionResult(redirect, idx)
 
-def execute_redirection(idx: int, parts: list):
+def execute_redirection(redirect: str, idx: int, parts: list):
     LHS_command = parts[: idx]
     if idx + 1 >= len(parts):
         return
@@ -45,8 +46,12 @@ def execute_redirection(idx: int, parts: list):
         if result.returncode != 0:
             sys.stderr.write(result.stderr)
         
-        with open(output_file_path, mode = "w", encoding = "utf-8") as file:
-            file.write(result.stdout)
+        if redirect in (">", "1>"):
+            with open(output_file_path, mode = "w", encoding = "utf-8") as file:
+                file.write(result.stdout)
+        else:
+            with open(output_file_path, mode = "w", encoding = "utf-8") as file:
+                file.write(result.stderr)
     
     except Exception as e:
         sys.stderr.write(f"Error: {e}")
@@ -57,7 +62,7 @@ def execute(parts: list):
     if path:
         redirect, idx = check_redirection(parts)
         if redirect:
-            execute_redirection(idx, parts)
+            execute_redirection(redirect, idx, parts)
         else:
             subprocess.run(parts)
             

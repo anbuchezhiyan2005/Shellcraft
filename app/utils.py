@@ -34,6 +34,9 @@ def check_redirection(parts: list):
     elif "1>>" in parts:
         idx = parts.index("1>>")
         redirect = "1>>"
+    elif "2>>" in parts:
+        idx = parts.index("2>>")
+        redirect = "2>>"
     
     return RedirectionResult(redirect, idx)
 
@@ -52,17 +55,23 @@ def execute_redirection(redirect: str, idx: int, parts: list):
         if redirect in (">", "1>", "2>"):  
             with open(output_file_path, mode = "w", encoding = "utf-8") as file:
                 file.write(result.stderr if redirect == "2>" else result.stdout)
+            
+            if redirect in ("1>", ">") and result.stderr:
+                sys.stderr.write(result.stderr)
+        
+            if redirect == "2>" and result.stdout:
+                sys.stdout.write(result.stdout)
+
         if redirect in (">>", "1>>"):
             with open(output_file_path, mode = "a", encoding = "utf-8") as file:
-                file.write(result.stdout)
-
-        if redirect in ("1>", ">") and result.stderr:
-            sys.stderr.write(result.stderr)
-        
-        if redirect == "2>" and result.stdout:
-            sys.stdout.write(result.stdout)
-
-        
+                file.write(result.stderr if redirect == "2>>" else result.stdout)
+            
+            if redirect in (">>", "1>>") and result.stderr:
+                sys.stderr.write(result.stderr)
+            
+            if redirect == "2>>" and result.stdout:
+                sys.stdout.write(result.stdout)
+    
 
     except Exception as e:
         sys.stderr.write(f"Error: {e}")

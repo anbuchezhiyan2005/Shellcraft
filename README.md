@@ -12,7 +12,8 @@ I look up functions, read docs, and debug as I go — but the decisions on how t
 - `cd` — change directory, supports `~`
 - `type` — identify if a command is a shell builtin or external
 - External command execution via PATH resolution
-- **Redirection (`>` and `1>`)** — redirect stdout to a file, creating directories as needed
+- **Redirection (`>`, `1>`, `>>`, `1>>`, `2>`, `2>>`)** — redirect and append stdout/stderr to a file, creating directories as needed
+- **Error Handling** — Graceful handling of missing directories and invalid commands
 
 ## Project Structure
 ```
@@ -29,3 +30,5 @@ python3 -m app.main
 
 ## Status
 🚧 Work in progress
+- Append redirection (`>>`, `1>>`, `2>>`) implemented (May 17, 2026)
+- Improved error handling for redirection and command execution (May 17, 2026)

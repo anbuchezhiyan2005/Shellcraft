@@ -63,13 +63,14 @@ def execute_redirection(redirect: str, idx: int, parts: list):
                 file.write(result.stderr if redirect == "2>" else result.stdout)
         if redirect in (">>", "1>>", "2>>"):
             with open(output_file_path, mode = "a", encoding = "utf-8") as file:
-                file.write(result.stderr if redirect == "2>>" else result.stdout)
+                file.write(result.stdout)
 
         if redirect in ("1>", ">") and result.stderr:
             sys.stderr.write(result.stderr)
         
         if redirect == "2>" and result.stdout:
             sys.stdout.write(result.stdout)
+
         
 
     except Exception as e:

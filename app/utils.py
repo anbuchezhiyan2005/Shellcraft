@@ -42,20 +42,10 @@ def execute_redirection(redirect: str, idx: int, parts: list):
     try:
         create_directory_for_file(output_file_path)
 
-        result = subprocess.run(LHS_command, capture_output = True, text = True)
-        # if result.returncode != 0:
-        #     sys.stderr.write(result.stderr)
-        
-        if LHS_command[0] == "echo":
-                sys.stdout.write(f"{result.stdout}")
-                
-        if redirect != "2>":
-            with open(output_file_path, mode = "w", encoding = "utf-8") as file:
-                file.write(result.stdout)
-        else:
-            with open(output_file_path, mode = "w", encoding = "utf-8") as file:
-                file.write(result.stderr)
-    
+        result = subprocess.run(LHS_command, capture_output = True, text = True)        
+        with open(output_file_path, mode = "w", encoding = "utf-8") as file:
+            file.write(result.stderr if redirect == "2>" else result.stdout)
+
     except Exception as e:
         sys.stderr.write(f"Error: {e}")
 

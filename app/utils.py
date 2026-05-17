@@ -56,12 +56,14 @@ def execute_redirection(redirect: str, idx: int, parts: list):
     try:
         create_directory_for_file(output_file_path)
 
-        result = subprocess.run(LHS_command, capture_output = True, text = True)        
-        with open(output_file_path, mode = "w", encoding = "utf-8") as file:
-            file.write(result.stderr if redirect == "2>" else result.stdout)
-        
-        with open(output_file_path, mode = "a", encoding = "utf-8") as file:
-            file.write(result.stderr if redirect == "2>>" else result.stdout)
+        result = subprocess.run(LHS_command, capture_output = True, text = True)
+
+        if redirect in (">", "1>", "2>"):  
+            with open(output_file_path, mode = "w", encoding = "utf-8") as file:
+                file.write(result.stderr if redirect == "2>" else result.stdout)
+        if redirect in (">>", "1>>", "2>>"):
+            with open(output_file_path, mode = "a", encoding = "utf-8") as file:
+                file.write(result.stderr if redirect == "2>>" else result.stdout)
 
         if redirect in ("1>", ">") and result.stderr:
             sys.stderr.write(result.stderr)

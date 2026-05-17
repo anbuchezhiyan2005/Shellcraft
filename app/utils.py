@@ -47,6 +47,8 @@ def execute_redirection(redirect: str, idx: int, parts: list):
         #     sys.stderr.write(result.stderr)
         
         if redirect != "2>":
+            if LHS_command[0] == "echo":
+                sys.stdout.write(f"{result.stdout}")
             with open(output_file_path, mode = "w", encoding = "utf-8") as file:
                 file.write(result.stdout)
         else:
@@ -63,8 +65,8 @@ def execute(parts: list):
         redirect, idx = check_redirection(parts)
         if redirect:
             execute_redirection(redirect, idx, parts)
-        
-        subprocess.run(parts)
+        else:
+            subprocess.run(parts)
             
     else:
         sys.stderr.write(f"{command}: command not found\n")

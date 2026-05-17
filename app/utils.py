@@ -49,7 +49,7 @@ def execute_redirection(redirect: str, idx: int, parts: list):
         if result.stdout and redirect == "2>":
             sys.stdout.write(result.stdout)
         
-        if result.stderr and redirect == ">" or "1>":
+        elif result.stderr and (redirect == ">" or "1>"):
             sys.stderr.write(result.stderr)
 
     except Exception as e:

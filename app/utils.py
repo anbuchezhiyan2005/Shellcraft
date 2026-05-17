@@ -13,8 +13,22 @@ def helper(command: str):
     else:
         sys.stdout.write(f"{command} not found\n")
 
-def check_redirection(parts: list):
+def check_append(parts: list):
+    if not parts:
+        return RedirectionResult("", -1)
 
+    append_redirect = ""
+    idx = -1
+    if ">>" in parts:
+        idx = parts.index(">>")
+        append_redirect = ">>"
+    elif "1>>" in parts:
+        idx = parts.index("1>>")
+        append_redirect = "1>>"
+
+    return RedirectionResult(append_redirect, idx)
+
+def check_redirection(parts: list):
     if not parts:
         return RedirectionResult("", -1)
     
@@ -45,6 +59,9 @@ def execute_redirection(redirect: str, idx: int, parts: list):
         result = subprocess.run(LHS_command, capture_output = True, text = True)        
         with open(output_file_path, mode = "w", encoding = "utf-8") as file:
             file.write(result.stderr if redirect == "2>" else result.stdout)
+        
+        with open(output_file_path, mode = "a", encoding = "utf-8") as file:
+            file.write(result.stderr if redirect == "2>>" else result.stdout)
 
         if redirect in ("1>", ">") and result.stderr:
             sys.stderr.write(result.stderr)
@@ -103,6 +120,6 @@ def check_builtin(command: str, command_dict: dict):
         sys.stdout.write(f"{command} is a shell builtin\n")
     else:
         helper(command)
-        
+
 
 

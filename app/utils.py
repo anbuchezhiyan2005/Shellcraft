@@ -46,7 +46,7 @@ def execute_redirection(redirect: str, idx: int, parts: list):
         # if result.returncode != 0:
         #     sys.stderr.write(result.stderr)
         
-        if redirect in (">", "1>"):
+        if result.returncode == 0:
             with open(output_file_path, mode = "w", encoding = "utf-8") as file:
                 file.write(result.stdout)
         else:

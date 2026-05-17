@@ -50,13 +50,7 @@ def execute_redirection(redirect: str, idx: int, parts: list):
             sys.stdout.write(result.stdout)
         
         if result.stderr and redirect == ">" or "1>":
-            sys.stdout.write(result.stderr)
-        # if redirect == "2>" and result.stdout:
-        #     sys.stdout.write(result.stdout)
-        # elif redirect == "":
-        #     sys.stdout.write(result.stdout)
-        # else:
-        #     sys.stdout.write(result.stderr if result.returncode != 0 else result.stdout)
+            sys.stderr.write(result.stderr)
 
     except Exception as e:
         sys.stderr.write(f"Error: {e}")

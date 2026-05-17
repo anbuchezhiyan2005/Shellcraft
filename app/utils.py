@@ -13,21 +13,6 @@ def helper(command: str):
     else:
         sys.stdout.write(f"{command} not found\n")
 
-def check_append(parts: list):
-    if not parts:
-        return RedirectionResult("", -1)
-
-    append_redirect = ""
-    idx = -1
-    if ">>" in parts:
-        idx = parts.index(">>")
-        append_redirect = ">>"
-    elif "1>>" in parts:
-        idx = parts.index("1>>")
-        append_redirect = "1>>"
-
-    return RedirectionResult(append_redirect, idx)
-
 def check_redirection(parts: list):
     if not parts:
         return RedirectionResult("", -1)
@@ -43,6 +28,12 @@ def check_redirection(parts: list):
     elif "2>" in parts:
         idx = parts.index("2>")
         redirect = "2>"
+    elif ">>" in parts:
+        idx = parts.index(">>")
+        redirect = ">>"
+    elif "1>>" in parts:
+        idx = parts.index("1>>")
+        redirect = "1>>"
     
     return RedirectionResult(redirect, idx)
 
@@ -61,7 +52,7 @@ def execute_redirection(redirect: str, idx: int, parts: list):
         if redirect in (">", "1>", "2>"):  
             with open(output_file_path, mode = "w", encoding = "utf-8") as file:
                 file.write(result.stderr if redirect == "2>" else result.stdout)
-        if redirect in (">>", "1>>", "2>>"):
+        if redirect in (">>", "1>>"):
             with open(output_file_path, mode = "a", encoding = "utf-8") as file:
                 file.write(result.stdout)
 

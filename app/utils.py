@@ -63,8 +63,8 @@ def execute(parts: list):
         redirect, idx = check_redirection(parts)
         if redirect:
             execute_redirection(redirect, idx, parts)
-        else:
-            subprocess.run(parts)
+        
+        subprocess.run(parts)
             
     else:
         sys.stderr.write(f"{command}: command not found\n")

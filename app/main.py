@@ -1,5 +1,7 @@
 import shlex
 import readline
+import glob
+import os
 from app import utils
 from app import commands
 
@@ -13,7 +15,6 @@ command_dict = {
 
 external_commands = utils.get_all_external_commands()
 all_commands = sorted(list(command_dict.keys()) + external_commands)
-pwd_files = utils.get_pwd_files()
 
 def cmd_completer(text, state):
     matches = []
@@ -34,17 +35,11 @@ def cmd_completer(text, state):
         return None
     
 def file_completer(text, state):
-    matches = []
+    matches = glob.glob(text + "*")
 
-    for file in pwd_files:
-        if file.startswith(text):
-            matches.append(file)
-    
-    if len(matches) == 1:
-        if state == 0:
-            return matches[state] + " "
-        else:
-            return None
+    for i, match in enumerate(matches):
+        if os.path.isdir(match):
+            matches[i] += os.sep
     
     if state < len(matches):
         return matches[state] + " "

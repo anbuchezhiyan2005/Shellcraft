@@ -3,7 +3,12 @@ import os
 from app import utils
 
 def echo_command(parts: list):
-        utils.execute(parts)
+        redirect, idx = utils.check_redirection(parts)
+        if redirect:
+            utils.execute_redirection(redirect, idx, parts)
+        else:
+            output = " ".join(parts[1:])
+            sys.stdout.write(output + "\n")
 
 def exit_command():
     sys.exit(0)

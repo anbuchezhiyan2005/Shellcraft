@@ -86,9 +86,9 @@ def execute(parts: list):
     command_string = shlex.join(parts)
     try:
         subprocess.run(command_string, shell = True)
-
-    except FileNotFoundError:
+    except Exception as e:
         sys.stderr.write(f"{parts[0]}: command not found\n")
+        
 
 
 def check_directory(parts: list):

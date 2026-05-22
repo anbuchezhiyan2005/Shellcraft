@@ -80,6 +80,7 @@ def main_completer(text, state):
     return None
 
 readline.set_completer(main_completer)
+readline.set_completer_delims(" \t\n")
 readline.parse_and_bind("tab: complete")
 
 def main():

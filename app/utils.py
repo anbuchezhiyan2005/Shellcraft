@@ -132,7 +132,7 @@ def check_builtin(command: str, command_dict: dict):
 
 def get_command_from_path(path: str):
     base_name = os.path.basename(path)
-    command, extension = os.path.splittext(base_name)
+    command, extension = os.path.splitext(base_name)
     return command
 
 def get_all_external_commands():
@@ -140,18 +140,18 @@ def get_all_external_commands():
     external_commands = set()
 
     for dir in directories:
-        if not os.par.isdir(dir):
+        if not os.path.isdir(dir):
             continue
         try:
             for file in os.listdir(dir):
                 if os.name == "nt":
-                    cmd, ext = os.path.splittext(file)
+                    cmd, ext = os.path.splitext(file)
                     if shutil.which(cmd):
-                        external_commands.insert(cmd)
+                        external_commands.add(cmd)
                 else:
                     file_path = os.path.join(dir, file)
                     if os.access(file_path, os.X_OK) and not os.path.isdir(file_path):
-                        external_commands.insert(file_path)
+                        external_commands.add(file_path)
 
         except OSError:
             continue

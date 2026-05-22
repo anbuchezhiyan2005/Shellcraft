@@ -11,18 +11,15 @@ command_dict = {
     "cd": lambda parts: commands.cd_command(parts) 
 }
 
+external_commands = utils.get_all_external_commands()
+all_commands = sorted(list(command_dict.keys()) + external_commands)
+
 def completer(text, state):
     matches = []
 
-    for key in command_dict:
-        if key.startswith(text):
-            matches.append(key)
-        else:
-            external_commands = utils.get_all_external_commands()
-
-            for cmd in external_commands:
-                if cmd.startswith(text):
-                    matches.append(cmd)
+    for cmd in all_commands:
+        if cmd.startswith(text):
+            matches.append(cmd)
     
     if state < len(matches):
         return matches[state] + " "

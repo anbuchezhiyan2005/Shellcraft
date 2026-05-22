@@ -57,7 +57,7 @@ def execute_redirection(redirect: str, idx: int, parts: list):
         to_console = ""
         console_stream = sys.stdout
 
-        result = subprocess.run(LHS_command, capture_output=True, text=True, shell = True)
+        result = subprocess.run(" ".join(LHS_command), capture_output=True, text=True, shell = True)
 
         if redirect in (">", "1>", ">>", "1>>"):
             to_file = result.stdout

@@ -93,7 +93,11 @@ def main():
         if command in command_dict:
             command_dict[command](parts)
         else:
-            utils.execute(parts)
+            redirect, idx = utils.check_redirection(parts)
+            if redirect:
+                utils.execute_redirection(redirect, idx, parts)
+            else:
+                utils.execute(parts)
 
 
 if __name__ == "__main__":

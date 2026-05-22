@@ -43,7 +43,7 @@ def file_completer(text, state):
     
     if len(matches) == 1:
         if state == 0:
-            return matches[state]
+            return matches[state] + " "
         else:
             return None
         

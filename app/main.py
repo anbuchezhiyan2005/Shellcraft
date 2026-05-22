@@ -42,7 +42,7 @@ def file_completer(text, state):
             matches[i] += os.sep
     
     if state < len(matches):
-        return matches[state] + " "
+        return matches[state]
     else:
         return None
 

@@ -2,6 +2,7 @@ import sys
 import shutil
 import subprocess
 import os
+import shlex
 from collections import namedtuple
 
 RedirectionResult = namedtuple("RedirectionResult", ["redirect", "idx"])
@@ -57,7 +58,7 @@ def execute_redirection(redirect: str, idx: int, parts: list):
         to_console = ""
         console_stream = sys.stdout
 
-        result = subprocess.run(" ".join(LHS_command), capture_output=True, text=True, shell = True)
+        result = subprocess.run(shlex.join(LHS_command), capture_output=True, text=True, shell = True)
 
         if redirect in (">", "1>", ">>", "1>>"):
             to_file = result.stdout
@@ -82,7 +83,7 @@ def execute_redirection(redirect: str, idx: int, parts: list):
 
 
 def execute(parts: list):
-    command_string = " ".join(parts)
+    command_string = shlex.join(parts)
     try:
         subprocess.run(command_string, shell = True)
 

@@ -85,7 +85,6 @@ def execute_redirection(redirect: str, idx: int, parts: list):
 def execute(parts: list):
     command = parts[0]
     path = shutil.which(command)
-
     if path:
         subprocess.run(shlex.join(parts), shell = True)
     else:

@@ -53,27 +53,29 @@ def execute_redirection(redirect: str, idx: int, parts: list):
     try:
         create_directory_for_file(output_file_path)
 
+        to_file = ""
+        to_console = ""
+        console_stream = sys.stdout
+
         result = subprocess.run(LHS_command, capture_output=True, text=True, shell = True)
 
-        if redirect in (">", "1>", "2>"):
-            with open(output_file_path, mode="w", encoding="utf-8") as file:
-                file.write(result.stderr if redirect == "2>" else result.stdout)
-
-            if redirect in ("1>", ">") and result.stderr:
-                sys.stderr.write(result.stderr)
-
-            if redirect == "2>" and result.stdout:
-                sys.stdout.write(result.stdout)
-
-        if redirect in (">>", "1>>", "2>>"):
-            with open(output_file_path, mode="a", encoding="utf-8") as file:
-                file.write(result.stderr if redirect == "2>>" else result.stdout)
-
-            if redirect in (">>", "1>>") and result.stderr:
-                sys.stderr.write(result.stderr)
-
-            if redirect == "2>>" and result.stdout:
-                sys.stdout.write(result.stdout)
+        if redirect in (">", "1>", ">>", "1>>"):
+            to_file = result.stdout
+            to_console = result.stderr
+            console_stream = sys.stderr
+        elif redirect in ("2>", "2>>"):
+            to_file = result.stderr
+            to_console = result.stdout
+            console_stream = sys.stdout
+        
+        mode = "a" if ">>" in redirect else "w"
+        
+        if to_file:
+            with open(output_file_path, mode = mode, encoding = "utf-8") as file:
+                file.write(to_file)
+        
+        if to_console:
+            console_stream.write(to_console)
 
     except Exception as e:
         sys.stderr.write(f"Error: {e}")

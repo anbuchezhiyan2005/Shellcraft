@@ -41,6 +41,12 @@ def file_completer(text, state):
         if os.path.isdir(match):
             matches[i] += os.sep
     
+    if len(matches) == 1:
+        if state == 0:
+            return matches[state] + " "
+        else:
+            return None
+        
     if state < len(matches):
         return matches[state]
     else:

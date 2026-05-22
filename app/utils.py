@@ -156,3 +156,13 @@ def get_all_external_commands():
         except OSError:
             continue
     return list(external_commands)
+
+def get_pwd_files():
+    curr_path = os.getcwd()
+    content = os.listdir(curr_path)
+    files = []
+    for c in content:
+        if not os.path.isdir(c):
+            files.append(c)
+    
+    return files

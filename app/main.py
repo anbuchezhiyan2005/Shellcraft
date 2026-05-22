@@ -13,8 +13,9 @@ command_dict = {
 
 external_commands = utils.get_all_external_commands()
 all_commands = sorted(list(command_dict.keys()) + external_commands)
+pwd_files = utils.get_pwd_files()
 
-def completer(text, state):
+def cmd_completer(text, state):
     matches = []
 
     for cmd in all_commands:
@@ -31,8 +32,48 @@ def completer(text, state):
         return matches[state] + " "
     else:
         return None
+    
+def file_completer(text, state):
+    matches = []
 
-readline.set_completer(completer)
+    for file in pwd_files:
+        if file.startswith(text):
+            matches.append(file)
+    
+    if len(matches) == 1:
+        if state == 0:
+            return matches[state] + " "
+        else:
+            return None
+    
+    if state < len(matches):
+        return matches[state] + " "
+    else:
+        return None
+
+argument_completers = {
+    "echo": lambda text, state: file_completer(text, state),
+    "type": lambda text, state: cmd_completer(text, state),
+    "cd": lambda text, state: file_completer(text, state),
+    "cat": lambda text, state: file_completer(text, state)
+}
+
+def main_completer(text, state):
+    line_buffer = readline.get_line_buffer()
+
+    parts = shlex.split(line_buffer)
+
+    if len(parts) <= 1:
+        return cmd_completer(text, state)
+    else:
+        command = parts[0]
+        if command in argument_completers:
+            return argument_completers[command](text, state)
+        else:
+            return cmd_completer(text, state)
+
+
+readline.set_completer(main_completer)
 readline.parse_and_bind("tab: complete")
 
 def main():

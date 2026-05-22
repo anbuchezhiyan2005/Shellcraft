@@ -1,5 +1,6 @@
 import sys
 import shlex
+import readline
 from app import utils
 from app import commands
 
@@ -11,11 +12,24 @@ command_dict = {
     "cd": lambda parts: commands.cd_command(parts) 
 }
 
+def completer(text, state):
+    matches = []
+
+    for key in command_dict:
+        if key.startswith(text):
+            matches.append(key)
+    
+    if state < len(matches):
+        return matches[state]
+    else:
+        return None
+
+readline.set_completer(completer)
+readline.parse_and_bind("tab: complete")
+
 def main():
     while True:
-        sys.stdout.write("$ ")
-        sys.stdout.flush()
-        userInput = sys.stdin.readline()
+        userInput = input("$ ")
         userInput = userInput.strip() 
         if not userInput:
             continue

@@ -67,11 +67,11 @@ def main_completer(text, state):
 
     if len(parts) > 0:
         command = parts[0]
-        if command in argument_completers:
-            return argument_completers[command](text, state)
-        else:
-            return file_completer(text, state)
+        completer_func = argument_completers.get(command, file_completer)
 
+        return completer_func(target_word, state)
+    
+    return None
 
 readline.set_completer(main_completer)
 readline.parse_and_bind("tab: complete")

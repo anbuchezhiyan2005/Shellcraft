@@ -65,7 +65,7 @@ def main_completer(text, state):
         if command in argument_completers:
             return argument_completers[command](text, state)
         else:
-            return cmd_completer(text, state)
+            return file_completer(text, state)
 
 
 readline.set_completer(main_completer)

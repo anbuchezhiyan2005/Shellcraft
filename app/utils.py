@@ -83,11 +83,14 @@ def execute_redirection(redirect: str, idx: int, parts: list):
 
 
 def execute(parts: list):
-    command_string = shlex.join(parts)
-    try:
-        subprocess.run(command_string, shell = True)
-    except Exception as e:
-        sys.stderr.write(f"{parts[0]}: command not found\n")
+    command = parts[0]
+    path = shutil.which(command)
+
+    if path:
+        subprocess.run(shlex.join(parts), shell = True)
+    else:
+        sys.stderr.write(f"{command}: command not found\n")
+    
         
 
 

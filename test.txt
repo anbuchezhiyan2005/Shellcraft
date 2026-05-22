@@ -1,0 +1,5 @@
+ Volume in drive D is New Volume
+ Volume Serial Number is F07C-A825
+
+ Directory of D:\Dev\projects\codecrafters-shell-python
+

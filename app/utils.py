@@ -80,17 +80,12 @@ def execute_redirection(redirect: str, idx: int, parts: list):
 
 
 def execute(parts: list):
-    command = parts[0]
-    path = shutil.which(command)
-    if path:
-        redirect, idx = check_redirection(parts)
-        if redirect:
-            execute_redirection(redirect, idx, parts)
-        else:
-            subprocess.run(parts)
+    command_string = " ".join(parts)
+    try:
+        subprocess.run(command_string, shell = True)
 
-    else:
-        sys.stderr.write(f"{command}: command not found\n")
+    except FileNotFoundError:
+        sys.stderr.write(f"{parts[0]}: command not found\n")
 
 
 def check_directory(parts: list):

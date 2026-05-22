@@ -11,6 +11,7 @@ I look up functions, read docs, and debug as I go — but the decisions on how t
 - `pwd` — print current working directory
 - `cd` — change directory, supports `~`
 - `type` — identify if a command is a shell builtin or external
+- **Tab Completion** — Autocomplete built-in and external commands from PATH.
 - External command execution via PATH resolution
 - **Redirection (`>`, `1>`, `>>`, `1>>`, `2>`, `2>>`)** — redirect and append stdout/stderr to a file, creating directories as needed
 - **Error Handling** — Graceful handling of missing directories and invalid commands
@@ -30,5 +31,6 @@ python3 -m app.main
 
 ## Status
 🚧 Work in progress
+- Tab completion for commands implemented (May 22, 2026)
 - Append redirection (`>>`, `1>>`, `2>>`) implemented (May 17, 2026)
 - Improved error handling for redirection and command execution (May 17, 2026)

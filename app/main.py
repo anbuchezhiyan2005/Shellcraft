@@ -41,12 +41,6 @@ def file_completer(text, state):
         if os.path.isdir(match):
             matches[i] += os.sep
     
-    if len(matches) == 1:
-        if state == 0:
-            return matches[state] + " "
-        else:
-            return None
-        
     if state < len(matches):
         return matches[state] + " "
     else:
@@ -61,12 +55,17 @@ argument_completers = {
 
 def main_completer(text, state):
     line_buffer = readline.get_line_buffer()
+    begin_index = readline.get_begidx()
+    end_index = readline.get_endidx()
 
+    target_word = line_buffer[begin_index : end_index]
+
+    if begin_index == 0:
+        return cmd_completer(target_word, state)
+    
     parts = shlex.split(line_buffer)
 
-    if len(parts) <= 1:
-        return cmd_completer(text, state)
-    else:
+    if len(parts) > 0:
         command = parts[0]
         if command in argument_completers:
             return argument_completers[command](text, state)

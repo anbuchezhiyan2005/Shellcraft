@@ -21,8 +21,14 @@ def completer(text, state):
         if cmd.startswith(text):
             matches.append(cmd)
     
+    if len(matches) == 1:
+        if state == 0:
+            return matches[state] + " "
+        else:
+            return None
+    
     if state < len(matches):
-        return matches[state] + " "
+        return matches[state]
     else:
         return None
 

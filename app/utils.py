@@ -151,7 +151,7 @@ def get_all_external_commands():
                 else:
                     file_path = os.path.join(dir, file)
                     if os.access(file_path, os.X_OK) and not os.path.isdir(file_path):
-                        external_commands.add(file_path)
+                        external_commands.add(file)
 
         except OSError:
             continue

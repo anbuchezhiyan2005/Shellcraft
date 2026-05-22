@@ -20,7 +20,7 @@ def completer(text, state):
             matches.append(key)
     
     if state < len(matches):
-        return matches[state]
+        return matches[state] + " "
     else:
         return None
 

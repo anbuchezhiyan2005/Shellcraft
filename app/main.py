@@ -30,7 +30,6 @@ readline.parse_and_bind("tab: complete")
 def main():
     while True:
         userInput = input("$ ")
-        userInput = userInput.strip() 
         if not userInput:
             continue
         parts = shlex.split(userInput)

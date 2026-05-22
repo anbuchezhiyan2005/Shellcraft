@@ -70,8 +70,8 @@ def execute_redirection(redirect: str, idx: int, parts: list):
         
         mode = "a" if ">>" in redirect else "w"
         
-        if to_file:
-            with open(output_file_path, mode = mode, encoding = "utf-8") as file:
+        with open(output_file_path, mode = mode, encoding = "utf-8") as file:
+            if to_file:
                 file.write(to_file)
         
         if to_console:

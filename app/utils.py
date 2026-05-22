@@ -129,3 +129,30 @@ def check_builtin(command: str, command_dict: dict):
         sys.stdout.write(f"{command} is a shell builtin\n")
     else:
         helper(command)
+
+def get_command_from_path(path: str):
+    base_name = os.path.basename(path)
+    command, extension = os.path.splittext(base_name)
+    return command
+
+def get_all_external_commands():
+    directories = os.environ.get("PATH", "").split(os.pathsep)
+    external_commands = set()
+
+    for dir in directories:
+        if not os.par.isdir(dir):
+            continue
+        try:
+            for file in os.listdir(dir):
+                if os.name == "nt":
+                    cmd, ext = os.path.splittext(file)
+                    if shutil.which(cmd):
+                        external_commands.insert(cmd)
+                else:
+                    file_path = os.path.join(dir, file)
+                    if os.access(file_path, os.X_OK) and not os.path.isdir(file_path):
+                        external_commands.insert(file_path)
+
+        except OSError:
+            continue
+    return list(external_commands)

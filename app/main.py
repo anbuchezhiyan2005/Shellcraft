@@ -1,4 +1,3 @@
-import sys
 import shlex
 import readline
 from app import utils
@@ -18,6 +17,12 @@ def completer(text, state):
     for key in command_dict:
         if key.startswith(text):
             matches.append(key)
+        else:
+            external_commands = utils.get_all_external_commands()
+
+            for cmd in external_commands:
+                if cmd.startswith(text):
+                    matches.append(cmd)
     
     if state < len(matches):
         return matches[state] + " "

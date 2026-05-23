@@ -89,16 +89,7 @@ def main():
         if not userInput:
             continue
         parts = shlex.split(userInput)
-        command = parts[0]
-        if command in command_dict:
-            command_dict[command](parts)
-        else:
-            redirect, idx = utils.check_redirection(parts)
-            if redirect:
-                utils.execute_redirection(redirect, idx, parts)
-            else:
-                utils.execute(parts)
-
+        utils.execute(parts, command_dict)
 
 if __name__ == "__main__":
     main()

@@ -8,14 +8,6 @@ from collections import namedtuple
 RedirectionResult = namedtuple("RedirectionResult", ["redirect", "idx"])
 
 
-def helper(command: str):
-    fullPath = shutil.which(command)
-    if fullPath:
-        sys.stdout.write(f"{command} is {fullPath}\n")
-    else:
-        sys.stdout.write(f"{command} not found\n")
-
-
 def check_redirection(parts: list):
     if not parts:
         return RedirectionResult("", -1)
@@ -44,21 +36,13 @@ def check_redirection(parts: list):
     return RedirectionResult(redirect, idx)
 
 
-def execute_redirection(redirect: str, idx: int, parts: list):
-    LHS_command = parts[:idx]
-    if idx + 1 >= len(parts):
-        return
-
-    output_file_path = parts[idx + 1]
-
+def execute_redirection(redirect: str, output_file_path: str, result):
     try:
         create_directory_for_file(output_file_path)
 
         to_file = ""
         to_console = ""
         console_stream = sys.stdout
-
-        result = subprocess.run(" ".join(LHS_command), capture_output=True, text=True, shell = True)
 
         if redirect in (">", "1>", ">>", "1>>"):
             to_file = result.stdout
@@ -81,13 +65,38 @@ def execute_redirection(redirect: str, idx: int, parts: list):
     except Exception as e:
         sys.stderr.write(f"Error: {e}")
 
-def execute(parts: list):
-    command = parts[0]
-    path = shutil.which(command)
-    if path:
-        subprocess.run(shlex.join(parts), shell = True)
+def execute(parts: list, command_dict: dict):
+    result = None
+    redirect, idx = check_redirection(parts)
+
+    if redirect:
+        LHS_command = parts[:idx]
+        command = LHS_command[0]
+        if idx + 1 >= len(parts):
+            return
+        output_file_path = parts[idx + 1]
+
+        if command in command_dict:
+            result = command[command](LHS_command)
+        else:
+            result = subprocess.run(LHS_command, capture_output = True, text = True, shell = True)
+        
+        execute_redirection(redirect, output_file_path, result)
+        return
+    
     else:
-        sys.stderr.write(f"{command}: command not found\n")
+        if command in command_dict:
+            result = command_dict[command](parts)
+        else:
+            result = subprocess.run(parts, capture_output = True, text = True, shell = True)
+
+    if result.stdout:
+        sys.stdout.write(result.stdout)
+
+    if result.stderr:
+        sys.stderr.write(result.stderr)
+    
+    return
 
 def create_directory_for_file(file_path: str):
     directory = os.path.dirname(os.path.abspath(file_path))

@@ -9,8 +9,8 @@ def echo_command(parts: list):
 def exit_command():
     sys.exit(0)
 
-def pwd_command():
-    sys.stdout.write(f"{os.getcwd()}\n")
+def pwd_command(parts: list):
+    return subprocess.run(parts, capture_output = True, text = True, shell = True)
 
 def cd_command(parts: list):
     # path = " ".join(parts[1:])

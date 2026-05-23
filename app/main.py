@@ -9,7 +9,7 @@ command_dict = {
     "exit": lambda _: commands.exit_command(),
     "echo": lambda parts: commands.echo_command(parts),
     "type": lambda parts: commands.type_command(parts, command_dict),
-    "pwd": lambda _: commands.pwd_command(),
+    "pwd": lambda parts: commands.pwd_command(parts),
     "cd": lambda parts: commands.cd_command(parts) 
 }
 

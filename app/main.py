@@ -89,7 +89,10 @@ def main():
         if not userInput:
             continue
         parts = shlex.split(userInput)
-        utils.execute(parts, command_dict)
+        if parts:
+            utils.execute(parts, command_dict)
+        else:
+            continue
 
 if __name__ == "__main__":
     main()

@@ -68,16 +68,18 @@ def execute_redirection(redirect: str, output_file_path: str, result):
 def execute(parts: list, command_dict: dict):
     result = None
     redirect, idx = check_redirection(parts)
+    command = parts[0]
 
     if redirect:
         LHS_command = parts[:idx]
-        command = LHS_command[0]
+        if not LHS_command:
+            return
         if idx + 1 >= len(parts):
             return
         output_file_path = parts[idx + 1]
 
         if command in command_dict:
-            result = command[command](LHS_command)
+            result = command_dict[command](LHS_command)
         else:
             result = subprocess.run(LHS_command, capture_output = True, text = True, shell = True)
         

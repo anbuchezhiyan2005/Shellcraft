@@ -13,6 +13,13 @@ command_dict = {
     "cd": lambda parts: commands.cd_command(parts) 
 }
 
+argument_completers = {
+    "echo": lambda text, state: file_completer(text, state),
+    "type": lambda text, state: cmd_completer(text, state),
+    "cd": lambda text, state: file_completer(text, state),
+    "cat": lambda text, state: file_completer(text, state)
+}
+
 external_commands = utils.get_all_external_commands()
 all_commands = sorted(list(command_dict.keys()) + external_commands)
 
@@ -51,13 +58,6 @@ def file_completer(text, state):
         return matches[state] + " "
     else:
         return None
-
-argument_completers = {
-    "echo": lambda text, state: file_completer(text, state),
-    "type": lambda text, state: cmd_completer(text, state),
-    "cd": lambda text, state: file_completer(text, state),
-    "cat": lambda text, state: file_completer(text, state)
-}
 
 def main_completer(text, state):
     line_buffer = readline.get_line_buffer()

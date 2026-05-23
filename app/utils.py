@@ -81,7 +81,6 @@ def execute_redirection(redirect: str, idx: int, parts: list):
     except Exception as e:
         sys.stderr.write(f"Error: {e}")
 
-
 def execute(parts: list):
     command = parts[0]
     path = shutil.which(command)
@@ -89,31 +88,6 @@ def execute(parts: list):
         subprocess.run(shlex.join(parts), shell = True)
     else:
         sys.stderr.write(f"{command}: command not found\n")
-    
-        
-
-
-def check_directory(parts: list):
-    path = " ".join(parts[1:])
-    curr_path = os.getcwd()
-
-    if path == "~":
-        try:
-            home_path = os.path.expanduser("~")
-            os.chdir(home_path)
-        except Exception as e:
-            sys.stderr.write(f"Error: {e}\n")
-            os.chdir(curr_path)
-
-    elif os.path.isdir(path):
-        try:
-            os.chdir(path)
-        except Exception as e:
-            sys.stderr.write(f"Error: {e}\n")
-            os.chdir(curr_path)
-    else:
-        sys.stdout.write(f"cd: {path}: No such file or directory\n")
-
 
 def create_directory_for_file(file_path: str):
     directory = os.path.dirname(os.path.abspath(file_path))
@@ -122,13 +96,6 @@ def create_directory_for_file(file_path: str):
             os.makedirs(directory, exist_ok=True)
         except Exception as e:
             sys.stderr.write(f"Error creating directory {directory}: {e}\n")
-
-
-def check_builtin(command: str, command_dict: dict):
-    if command in command_dict:
-        sys.stdout.write(f"{command} is a shell builtin\n")
-    else:
-        helper(command)
 
 def get_command_from_path(path: str):
     base_name = os.path.basename(path)

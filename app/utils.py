@@ -4,9 +4,30 @@ import subprocess
 import os
 import shlex
 from collections import namedtuple
+from app.enums import result as base_result
 
 RedirectionResult = namedtuple("RedirectionResult", ["redirect", "idx"])
 
+
+def _new_result():
+    return base_result.copy()
+
+def _normalize_result(result_obj):
+    result = _new_result()
+
+    if result_obj is None:
+        return result
+
+    if isinstance(result_obj, dict):
+        result["stdout"] = result_obj.get("stdout", "")
+        result["stderr"] = result_obj.get("stderr", "")
+        result["returncode"] = result_obj.get("returncode", 0)
+        return result
+
+    result["stdout"] = getattr(result_obj, "stdout", "") or ""
+    result["stderr"] = getattr(result_obj, "stderr", "") or ""
+    result["returncode"] = getattr(result_obj, "returncode", 0)
+    return result
 
 def check_redirection(parts: list):
     if not parts:
@@ -45,12 +66,12 @@ def execute_redirection(redirect: str, output_file_path: str, result):
         console_stream = sys.stdout
 
         if redirect in (">", "1>", ">>", "1>>"):
-            to_file = result.stdout
-            to_console = result.stderr
+            to_file = result["stdout"]
+            to_console = result["stderr"]
             console_stream = sys.stderr
         elif redirect in ("2>", "2>>"):
-            to_file = result.stderr
-            to_console = result.stdout
+            to_file = result["stderr"]
+            to_console = result["stdout"]
             console_stream = sys.stdout
         
         mode = "a" if ">>" in redirect else "w"
@@ -66,7 +87,6 @@ def execute_redirection(redirect: str, output_file_path: str, result):
         sys.stderr.write(f"Error: {e}")
 
 def execute(parts: list, command_dict: dict):
-    result = None
     redirect, idx = check_redirection(parts)
     command = parts[0]
 
@@ -79,30 +99,27 @@ def execute(parts: list, command_dict: dict):
         output_file_path = parts[idx + 1]
 
         if command in command_dict:
-            result = command_dict[command](LHS_command)
+            result_obj = command_dict[command](LHS_command)
         else:
-            result = subprocess.run(LHS_command, capture_output = True, text = True, shell = True)
-        
-        if result is None:
-            return
-        
+            result_obj = subprocess.run(LHS_command, capture_output = True, text = True, shell = True)
+
+        result = _normalize_result(result_obj)
         execute_redirection(redirect, output_file_path, result)
         return
     
     else:
         if command in command_dict:
-            result = command_dict[command](parts)
+            result_obj = command_dict[command](parts)
         else:
-            result = subprocess.run(parts, capture_output = True, text = True, shell = True)
+            result_obj = subprocess.run(parts, capture_output = True, text = True, shell = True)
 
-    if result == None:
-        return
-    
-    if result.stdout:
-        sys.stdout.write(result.stdout)
+    result = _normalize_result(result_obj)
 
-    if result.stderr:
-        sys.stderr.write(result.stderr)
+    if result["stdout"]:
+        sys.stdout.write(result["stdout"])
+
+    if result["stderr"]:
+        sys.stderr.write(result["stderr"])
     
     return
 

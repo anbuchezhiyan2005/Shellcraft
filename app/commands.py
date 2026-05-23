@@ -16,7 +16,7 @@ def cd_command(parts: list):
     path = " ".join(parts[1:])
     curr_path = os.getcwd()
 
-    if path == "~":
+    if path == "~" or "":
         try:
             home_path = os.path.expanduser("~")
             os.chdir(home_path)
@@ -34,7 +34,7 @@ def cd_command(parts: list):
         sys.stdout.write(f"cd: {path}: No such file or directory\n")
 
 def type_command(parts: list, command_dict: dict):
-    if not parts:
+    if len(parts) < 2:
         return None
     result = subprocess.run(parts, capture_output = True, text = True, shell = True)
     command = parts[1]

@@ -69,15 +69,16 @@ def main_completer(text, state):
     if begin_index == 0:
         return cmd_completer(target_word, state)
     
-    parts = shlex.split(line_buffer)
+    try:
+        parts = shlex.split(line_buffer)
 
-    if len(parts) > 0:
-        command = parts[0]
-        completer_func = argument_completers.get(command, file_completer)
-
-        return completer_func(target_word, state)
-    
-    return None
+        if len(parts) > 0:
+            command = parts[0]
+            completer_func = argument_completers.get(command, file_completer)
+            return completer_func(target_word, state)
+        
+    except ValueError:
+        return None
 
 readline.set_completer(main_completer)
 readline.set_completer_delims(" \t\n")

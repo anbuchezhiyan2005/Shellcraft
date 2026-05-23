@@ -83,6 +83,9 @@ def execute(parts: list, command_dict: dict):
         else:
             result = subprocess.run(LHS_command, capture_output = True, text = True, shell = True)
         
+        if result is None:
+            return
+        
         execute_redirection(redirect, output_file_path, result)
         return
     
@@ -92,6 +95,9 @@ def execute(parts: list, command_dict: dict):
         else:
             result = subprocess.run(parts, capture_output = True, text = True, shell = True)
 
+    if result == None:
+        return
+    
     if result.stdout:
         sys.stdout.write(result.stdout)
 

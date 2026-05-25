@@ -2,7 +2,6 @@ import sys
 import shutil
 import subprocess
 import os
-import shlex
 from collections import namedtuple
 from app.enums import result as base_result
 

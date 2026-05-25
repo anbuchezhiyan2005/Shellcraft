@@ -109,7 +109,7 @@ def execute(parts: list, command_dict: dict):
     
     else:
         if command in command_dict:
-            result_obj = command_dict[command](parts)
+            result_obj = command_dict[command](parts, command_dict)
         else:
             try:
                 result_obj = subprocess.run(parts, capture_output = True, text = True)

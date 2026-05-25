@@ -111,7 +111,7 @@ def execute(parts: list, command_dict: dict):
         if command in command_dict:
             result_obj = command_dict[command](parts)
         else:
-            result_obj = subprocess.run(parts, capture_output = True, text = True, shell = True)
+            result_obj = subprocess.run(" ".join(parts), capture_output = True, text = True, shell = True)
 
     result = _normalize_result(result_obj)
 

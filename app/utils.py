@@ -12,6 +12,7 @@ RedirectionResult = namedtuple("RedirectionResult", ["redirect", "idx"])
 def _new_result():
     return base_result.copy()
 
+
 def _normalize_result(result_obj):
     result = _new_result()
 
@@ -29,32 +30,16 @@ def _normalize_result(result_obj):
     result["returncode"] = getattr(result_obj, "returncode", 0)
     return result
 
+
 def check_redirection(parts: list):
     if not parts:
         return RedirectionResult("", -1)
 
-    redirect = ""
-    idx = -1
-    if ">" in parts:
-        idx = parts.index(">")
-        redirect = ">"
-    elif "1>" in parts:
-        idx = parts.index("1>")
-        redirect = "1>"
-    elif "2>" in parts:
-        idx = parts.index("2>")
-        redirect = "2>"
-    elif ">>" in parts:
-        idx = parts.index(">>")
-        redirect = ">>"
-    elif "1>>" in parts:
-        idx = parts.index("1>>")
-        redirect = "1>>"
-    elif "2>>" in parts:
-        idx = parts.index("2>>")
-        redirect = "2>>"
+    for token in ("2>>", "1>>", ">>", "2>", "1>", ">"):
+        if token in parts:
+            return RedirectionResult(token, parts.index(token))
 
-    return RedirectionResult(redirect, idx)
+    return RedirectionResult("", -1)
 
 
 def execute_redirection(redirect: str, output_file_path: str, result):
@@ -73,20 +58,23 @@ def execute_redirection(redirect: str, output_file_path: str, result):
             to_file = result["stderr"]
             to_console = result["stdout"]
             console_stream = sys.stdout
-        
+
         mode = "a" if ">>" in redirect else "w"
-        
-        with open(output_file_path, mode = mode, encoding = "utf-8") as file:
+
+        with open(output_file_path, mode=mode, encoding="utf-8") as file:
             if to_file:
                 file.write(to_file)
-        
+
         if to_console:
             console_stream.write(to_console)
 
     except Exception as e:
-        sys.stderr.write(f"Error: {e}")
+        sys.stderr.write(f"Error: {e}\n")
+
 
 def execute(parts: list, command_dict: dict):
+    if not parts:
+        return
     redirect, idx = check_redirection(parts)
     command = parts[0]
 
@@ -101,18 +89,24 @@ def execute(parts: list, command_dict: dict):
         if command in command_dict:
             result_obj = command_dict[command](LHS_command, command_dict)
         else:
-            result_obj = subprocess.run(LHS_command, capture_output = True, text = True)
+            try:
+                result_obj = subprocess.run(LHS_command, capture_output=True, text=True)
+            except FileNotFoundError:
+                result = _new_result()
+                result["stderr"] = f"{parts[0]}: command not found\n"
+                result["returncode"] = 127
+                result_obj = result
 
         result = _normalize_result(result_obj)
         execute_redirection(redirect, output_file_path, result)
         return
-    
+
     else:
         if command in command_dict:
             result_obj = command_dict[command](parts, command_dict)
         else:
             try:
-                result_obj = subprocess.run(parts, capture_output = True, text = True)
+                result_obj = subprocess.run(parts, capture_output=True, text=True)
             except FileNotFoundError:
                 result = _new_result()
                 result["stderr"] = f"{parts[0]}: command not found\n"
@@ -126,8 +120,9 @@ def execute(parts: list, command_dict: dict):
 
     if result["stderr"]:
         sys.stderr.write(result["stderr"])
-    
+
     return
+
 
 def create_directory_for_file(file_path: str):
     directory = os.path.dirname(os.path.abspath(file_path))
@@ -137,10 +132,12 @@ def create_directory_for_file(file_path: str):
         except Exception as e:
             sys.stderr.write(f"Error creating directory {directory}: {e}\n")
 
+
 def get_command_from_path(path: str):
     base_name = os.path.basename(path)
     command, extension = os.path.splitext(base_name)
     return command
+
 
 def get_all_external_commands():
     directories = os.environ.get("PATH", "").split(os.pathsep)
@@ -164,6 +161,7 @@ def get_all_external_commands():
             continue
     return list(external_commands)
 
+
 def get_pwd_files():
     curr_path = os.getcwd()
     content = os.listdir(curr_path)
@@ -171,5 +169,5 @@ def get_pwd_files():
     for c in content:
         if not os.path.isdir(c):
             files.append(c)
-    
+
     return files

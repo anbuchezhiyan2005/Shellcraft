@@ -8,24 +8,24 @@ def _new_result():
     return base_result.copy()
 
 
-def echo_command(parts: list = None, command_dict: dict = None):
+def echo_command(parts: list, command_dict: dict):
     result = _new_result()
     output = " ".join(parts[1:])
     result["stdout"] = f"{output}\n"
     return result
 
 
-def exit_command(parts: list = None, command_dict: dict = None):
+def exit_command(parts: list, command_dict: dict):
     sys.exit(0)
 
 
-def pwd_command(parts: list = None, command_dict: dict = None):
+def pwd_command(parts: list, command_dict: dict):
     result = _new_result()
     result["stdout"] = f"{os.getcwd()}\n"
     return result
 
 
-def cd_command(parts: list = None, command_dict: dict = None):
+def cd_command(parts: list, command_dict: dict):
     result = _new_result()
     path = " ".join(parts[1:])
     curr_path = os.getcwd()
@@ -52,7 +52,7 @@ def cd_command(parts: list = None, command_dict: dict = None):
     return result
 
 
-def type_command(parts: list = None, command_dict: dict = None):
+def type_command(parts: list, command_dict: dict):
     result = _new_result()
     if len(parts) < 2:
         result["stderr"] = "type: missing argument\n"

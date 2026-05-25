@@ -15,11 +15,11 @@ def echo_command(parts: list):
     return result
 
 
-def exit_command():
+def exit_command(parts: list):
     sys.exit(0)
 
 
-def pwd_command():
+def pwd_command(parts: list):
     result = _new_result()
     result["stdout"] = f"{os.getcwd()}\n"
     return result

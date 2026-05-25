@@ -6,11 +6,11 @@ from app import utils
 from app import commands
 
 command_dict = {
-    "exit": lambda _: commands.exit_command(),
-    "echo": lambda parts: commands.echo_command(parts),
-    "type": lambda parts: commands.type_command(parts, command_dict),
-    "pwd": lambda parts: commands.pwd_command(parts),
-    "cd": lambda parts: commands.cd_command(parts) 
+    "exit": lambda parts, command_dict: commands.exit_command(parts, command_dict),
+    "echo": lambda parts, command_dict: commands.echo_command(parts, command_dict),
+    "type": lambda parts, command_dict: commands.type_command(parts, command_dict),
+    "pwd": lambda parts, command_dict: commands.pwd_command(parts, command_dict),
+    "cd": lambda parts, command_dict: commands.cd_command(parts, command_dict) 
 }
 
 argument_completers = {

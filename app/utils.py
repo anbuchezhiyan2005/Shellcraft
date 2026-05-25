@@ -99,7 +99,7 @@ def execute(parts: list, command_dict: dict):
         output_file_path = parts[idx + 1]
 
         if command in command_dict:
-            result_obj = command_dict[command](LHS_command)
+            result_obj = command_dict[command](LHS_command, command_dict)
         else:
             result_obj = subprocess.run(LHS_command, capture_output = True, text = True)
 

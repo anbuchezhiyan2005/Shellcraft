@@ -101,7 +101,7 @@ def execute(parts: list, command_dict: dict):
         if command in command_dict:
             result_obj = command_dict[command](LHS_command)
         else:
-            result_obj = subprocess.run(LHS_command, capture_output = True, text = True, shell = True)
+            result_obj = subprocess.run(" ".join(LHS_command), capture_output = True, text = True, shell = True)
 
         result = _normalize_result(result_obj)
         execute_redirection(redirect, output_file_path, result)

@@ -111,7 +111,13 @@ def execute(parts: list, command_dict: dict):
         if command in command_dict:
             result_obj = command_dict[command](parts)
         else:
-            result_obj = subprocess.run(parts, capture_output = True, text = True)
+            try:
+                result_obj = subprocess.run(parts, capture_output = True, text = True)
+            except FileNotFoundError:
+                result = _new_result()
+                result["stderr"] = f"{parts[0]}: command not found\n"
+                result["returncode"] = 127
+                result_obj = result
 
     result = _normalize_result(result_obj)
 
